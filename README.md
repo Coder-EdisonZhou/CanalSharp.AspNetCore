@@ -2,8 +2,8 @@
 一个基于CanalSharp（一款针对.NET的Canal客户端开源项目）封装的ASP.NET Core业务组件，可以用于实时收集MySql数据更改记录，目前为Draft版本。
 
 # 关于CanalSharp
-CanalSharp 是阿里巴巴开源项目 Canal 的 .NET 客户端。为 .NET 开发者提供一个更友好的使用 Canal 的方式。Canal 是mysql数据库binlog的增量订阅&消费组件，其作者是[WithLin](https://github.com/WithLin)和[晓晨](https://github.com/stulzq)。
-更多关于CanalSharp的信息请浏览：https://github.com/CanalClient/CanalSharp
+CanalSharp 是阿里巴巴开源项目 Canal 的 .NET 客户端。为 .NET 开发者提供一个更友好的使用 Canal 的方式。Canal 是mysql数据库binlog的增量订阅&消费组件，其作者是[WithLin](https://github.com/WithLin)和[晓晨](https://github.com/stulzq)。<br/>
+更多关于CanalSharp的信息请浏览：https://github.com/CanalClient/CanalSharp<br/>
 更多关于Canal的信息请浏览：https://github.com/alibaba/canal
 
 # 关于此组件
@@ -13,13 +13,18 @@ CanalSharp.AspNetCore是一个基于CanalSharp的适用于ASP.NET Core的一个�
 当前的canal开源版本支持5.7及以下的版本，针对阿里云RDS账号默认已经有binlog dump权限，不需要任何权限或者binlog设置，可以直接跳过这一步。
 开启binlog写入功能，并且配置binlog模式为row.
 修改C:\ProgramData\MySQL\MySQL Server 5.7\my.ini的以下内容
-> log-bin=mysql-bin
-> binlog-format=Row
-> server-id=1
+```sh
+log-bin=mysql-bin
+binlog-format=Row
+server-id=1
+```
+
 
 重启数据库服务，测试修改是否生效
-> show variables like 'binlog_format';
-> show variables like 'log_bin';
+```sh
+show variables like 'binlog_format';
+show variables like 'log_bin';
+```
 
 创建一个Canal用于获取binlog的用户并授予权限
 ```sh
@@ -29,6 +34,7 @@ FLUSH PRIVILEGES;
 ```
 
 创建一张用于记录数据变更的历史数据表：
+```sh
 CREATE TABLE IF NOT EXISTS `canal.logs` (
 `Id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Id',
 `SchemaName` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '数据库名称',
@@ -40,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `canal.logs` (
 `ExecuteTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '变更时间',
 PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='变更日志记录表';
+```
 
 # 安装Canal-Server
 通过Docker拉取Canal镜像：
@@ -73,7 +80,7 @@ docker run --restart=always --name core_productservice_canal \
     "Destination": "products", // 与Canal-Server中配置的destination保持一致
     "Filter": "xdp_products_dev\\..*", // 与Canal-Server中配置的filter保持一致
     "SleepTime": 50, // SleepTime越短监听频率越高但也越耗CPU
-    "BufferSize": 2048 // 每次监听获取的数据量大小，单位为字节，如果涉及到的变更数据存在大批量（如products表可能每次导入很多条）请将BufferSize设大一点
+    "BufferSize": 2048 // 每次监听获取的数据量大小，单位为字节
   }
 ```
 最后，在StartUp类中的Configure方法中加入以下代码行：
