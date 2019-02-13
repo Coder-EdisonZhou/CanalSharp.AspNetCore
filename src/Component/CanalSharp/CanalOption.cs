@@ -1,4 +1,4 @@
-﻿namespace CanalSharp.AspNetCore.Middleware.CanalSharp
+﻿namespace CanalSharp.AspNetCore.CanalSharp
 {
     public class CanalOption
     {

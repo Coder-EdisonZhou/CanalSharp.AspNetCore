@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CanalSharp.AspNetCore.Middleware.Infrastructure
+namespace CanalSharp.AspNetCore.Infrastructure
 {
     public class ChangeLog
     {

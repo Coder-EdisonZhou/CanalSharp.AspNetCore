@@ -1,4 +1,4 @@
-﻿using CanalSharp.AspNetCore.Middleware.Utils;
+﻿using CanalSharp.AspNetCore.Utils;
 using CanalSharp.Client;
 using CanalSharp.Client.Impl;
 using Com.Alibaba.Otter.Canal.Protocol;
@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CanalSharp.AspNetCore.Middleware.Infrastructure;
+using CanalSharp.AspNetCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 
-namespace CanalSharp.AspNetCore.Middleware.CanalSharp
+namespace CanalSharp.AspNetCore.CanalSharp
 {
     public class CanalClientHandler : ICanalClientHandler, IDisposable
     {
