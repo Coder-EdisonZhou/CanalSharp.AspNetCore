@@ -1,4 +1,4 @@
-﻿namespace CanalSharp.AspNetCore.Middleware.Infrastructure
+﻿namespace CanalSharp.AspNetCore.Infrastructure
 {
     public class OutputOptions
     {

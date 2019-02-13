@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CanalSharp.AspNetCore.Middleware.CanalSharp
+namespace CanalSharp.AspNetCore.CanalSharp
 {
     public interface ICanalClientHandler : IDisposable
     {

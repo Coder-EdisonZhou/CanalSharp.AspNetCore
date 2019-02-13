@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Middleware\CanalSharp.AspNetCore.Middleware.csproj" />
+    <ProjectReference Include="..\..\Component\CanalSharp.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CanalSharp.AspNetCore.Middleware.Utils
+namespace CanalSharp.AspNetCore.Utils
 {
     /// <summary>
     /// 日期格式帮助类

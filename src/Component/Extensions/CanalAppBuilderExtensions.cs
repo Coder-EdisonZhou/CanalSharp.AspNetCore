@@ -1,12 +1,12 @@
-﻿using CanalSharp.AspNetCore.Middleware.CanalSharp;
-using CanalSharp.AspNetCore.Middleware.Infrastructure;
+﻿using CanalSharp.AspNetCore.CanalSharp;
+using CanalSharp.AspNetCore.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace CanalSharp.AspNetCore.Middleware.Extensions
+namespace CanalSharp.AspNetCore.Extensions
 {
     public static class CanalAppBuilderExtensions
     {

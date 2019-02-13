@@ -1,5 +1,5 @@
-﻿using CanalSharp.AspNetCore.Middleware.CanalSharp;
-using CanalSharp.AspNetCore.Middleware.Extensions;
+﻿using CanalSharp.AspNetCore.CanalSharp;
+using CanalSharp.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

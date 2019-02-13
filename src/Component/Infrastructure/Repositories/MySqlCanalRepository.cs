@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dapper;
 
-namespace CanalSharp.AspNetCore.Middleware.Infrastructure
+namespace CanalSharp.AspNetCore.Infrastructure
 {
     public class MySqlCanalRepository : ICanalRepository
     {
