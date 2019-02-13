@@ -69,7 +69,7 @@ docker run --restart=always --name core_productservice_canal \
 ```
 
 # 使用CanalSharp.AspNetCore
-首先，通过NuGet或项目引用添加该组件
+首先，通过NuGet或项目引用添加该组件<br/>
 其次，在配置文件（appSettings.json)中添加以下配置项：
 ```sh
 "Canal": {
