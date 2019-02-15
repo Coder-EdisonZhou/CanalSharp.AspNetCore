@@ -54,7 +54,6 @@ PRIMARY KEY (`Id`)
 docker pull canal/canal-server:v1.1.2
 ```
 通过以下命令启动Canal实例：
-*.其中name、destinations、defaultDatabaseName、filter根据要监听的业务数据库按需修改。
 ```sh
 docker run --restart=always --name core_productservice_canal \
 -e canal.instance.master.address=192.168.16.150:3306 \
@@ -67,6 +66,7 @@ docker run --restart=always --name core_productservice_canal \
 -p 8001:11111 \
 -d canal/canal-server:v1.1.2
 ```
+`PS`: 其中name、destinations、defaultDatabaseName、filter根据要监听的业务数据库按需修改。
 
 # 使用CanalSharp.AspNetCore
 首先，通过NuGet或项目引用添加该组件<br/>
