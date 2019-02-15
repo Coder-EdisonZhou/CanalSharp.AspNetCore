@@ -77,8 +77,8 @@ docker run --restart=always --name core_productservice_canal \
     "LogSource": "Core.Product.Canal",
     "ServerIP": "192.168.16.190", // Canal-Server所在的服务器IP
     "ServerPort": 8001, // Canal-Server所在的服务器Port
-    "Destination": "products", // 与Canal-Server中配置的destination保持一致
-    "Filter": "xdp_products_dev\\..*", // 与Canal-Server中配置的filter保持一致
+    "Destination": "products", // 建议与Canal-Server中配置的destination保持一致
+    "Filter": "products_dev\\..*", // 建议与Canal-Server中配置的filter保持一致
     "SleepTime": 50, // SleepTime越短监听频率越高但也越耗CPU
     "BufferSize": 2048 // 每次监听获取的数据量大小，单位为字节
   }
