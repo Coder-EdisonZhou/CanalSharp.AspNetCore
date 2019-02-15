@@ -11,7 +11,7 @@ CanalSharp.AspNetCore是一个基于CanalSharp的适用于ASP.NET Core的一个�
 
 # 准备工作
 当前的canal开源版本支持5.7及以下的版本，针对阿里云RDS账号默认已经有binlog dump权限，不需要任何权限或者binlog设置，可以直接跳过这一步。
-开启binlog写入功能，并且配置binlog模式为row.
+开启binlog写入功能，并且配置binlog模式为row。<br/>
 修改C:\ProgramData\MySQL\MySQL Server 5.7\my.ini的以下内容
 ```sh
 log-bin=mysql-bin
@@ -54,7 +54,6 @@ PRIMARY KEY (`Id`)
 docker pull canal/canal-server:v1.1.2
 ```
 通过以下命令启动Canal实例：
-*.其中name、destinations、defaultDatabaseName、filter根据要监听的业务数据库按需修改。
 ```sh
 docker run --restart=always --name core_productservice_canal \
 -e canal.instance.master.address=192.168.16.150:3306 \
@@ -67,6 +66,7 @@ docker run --restart=always --name core_productservice_canal \
 -p 8001:11111 \
 -d canal/canal-server:v1.1.2
 ```
+`PS`: 其中name、destinations、defaultDatabaseName、filter根据要监听的业务数据库按需修改。
 
 # 使用CanalSharp.AspNetCore
 首先，通过NuGet或项目引用添加该组件<br/>
@@ -77,8 +77,8 @@ docker run --restart=always --name core_productservice_canal \
     "LogSource": "Core.Product.Canal",
     "ServerIP": "192.168.16.190", // Canal-Server所在的服务器IP
     "ServerPort": 8001, // Canal-Server所在的服务器Port
-    "Destination": "products", // 与Canal-Server中配置的destination保持一致
-    "Filter": "xdp_products_dev\\..*", // 与Canal-Server中配置的filter保持一致
+    "Destination": "products", // 建议与Canal-Server中配置的destination保持一致
+    "Filter": "products_dev\\..*", // 建议与Canal-Server中配置的filter保持一致
     "SleepTime": 50, // SleepTime越短监听频率越高但也越耗CPU
     "BufferSize": 2048 // 每次监听获取的数据量大小，单位为字节
   }
@@ -94,8 +94,9 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env,
 ```
 
 # 效果展示
-当在指定数据库对某张表的某行数据进行Update或Delete，又或者进行Insert行操作后，canal.logs表会自动记录变更的记录数据如下图：
-[![N|DEMO](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_canal.logs.show.png)](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_canal.logs.show.png)
+当在指定要监听的数据库对某张表的某行数据进行Update或Delete操作后，又或者进行Insert行操作后，canal.logs表会自动记录变更的记录数据如下图：
+[![N|DEMO](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_canal.logs.show.png)](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_canal.logs.show.png)<br/>
+`PS`: INSERT操作会记录新增的数据行数据到CurrentValue列，DELETE操作会记录删除的数据行数据到PreviousValue列，UPDATE操作则会记录修改前PreviousValue和修改后的值CurrentValue。
 
 
 

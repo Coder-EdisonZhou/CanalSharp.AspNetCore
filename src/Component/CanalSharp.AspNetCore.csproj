@@ -8,6 +8,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.0.1</Version>
     <PackageIconUrl></PackageIconUrl>
+    <PackageProjectUrl>https://github.com/XiLife-OSPC/CanalSharp.AspNetCore</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
