@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CanalSharp.AspNetCore", "CanalSharp.AspNetCore.csproj", "{F500CE2E-CA2C-4A6F-A89C-B5A2D6763405}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CanalSharp.AspNetCore.Sample", "CanalSharp.AspNetCore.Sample.csproj", "{790C07B6-6B09-4A53-9E1A-C60DD70CB701}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F500CE2E-CA2C-4A6F-A89C-B5A2D6763405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F500CE2E-CA2C-4A6F-A89C-B5A2D6763405}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F500CE2E-CA2C-4A6F-A89C-B5A2D6763405}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F500CE2E-CA2C-4A6F-A89C-B5A2D6763405}.Release|Any CPU.Build.0 = Release|Any CPU
+		{790C07B6-6B09-4A53-9E1A-C60DD70CB701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{790C07B6-6B09-4A53-9E1A-C60DD70CB701}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{790C07B6-6B09-4A53-9E1A-C60DD70CB701}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{790C07B6-6B09-4A53-9E1A-C60DD70CB701}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {3636BE21-2284-462F-B837-99442CC32B22}
+		SolutionGuid = {5E2BDDD2-DE55-42BD-A829-66C609CB104B}
 	EndGlobalSection
 EndGlobal

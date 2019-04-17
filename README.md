@@ -84,7 +84,7 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env,
 ```
 
 # 示例项目
->[CanalSharp.AspNetCore.Sample](https://github.com/EdisonChou/CanalSharp.AspNetCore/tree/master/src/Sample/CanalSharp.AspNetCore.Sample)
+>[CanalSharp.AspNetCore.Sample](https://github.com/EdisonChou/CanalSharp.AspNetCore/tree/master/sample)
 
 # 效果展示
 当在指定要监听的数据库对某张表的某行数据进行Update或Delete操作后，又或者进行Insert行操作后，canal.logs表会自动记录变更的记录数据如下图：
