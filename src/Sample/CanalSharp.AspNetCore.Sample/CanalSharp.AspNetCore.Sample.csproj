@@ -10,9 +10,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CanalSharp.AspNetCore" Version="0.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Component\CanalSharp.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>
