@@ -66,7 +66,10 @@ docker run --restart=always --name core_productservice_canal \
     "Destination": "products", // 建议与Canal-Server中配置的destination保持一致
     "Filter": "products_dev\\..*", // 建议与Canal-Server中配置的filter保持一致
     "SleepTime": 50, // SleepTime越短监听频率越高但也越耗CPU
-    "BufferSize": 2048 // 每次监听获取的数据量大小，单位为字节
+    "BufferSize": 2048, // 每次监听获取的数据量大小，单位为字节
+    "Output": {
+      "ConnStr": "Server=192.168.16.150;Port=3306;Database=products_dev;Uid=dev;Pwd=xdp" // 要输出的日志记录表所在的数据连接字符串
+    }
   }
 ```
 最后，在StartUp类中的Configure方法中加入以下代码行：
