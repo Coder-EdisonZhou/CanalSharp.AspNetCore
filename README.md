@@ -54,7 +54,10 @@ docker run --restart=always --name core_productservice_canal \
 `PS`: 其中name、destinations、defaultDatabaseName、filter根据要监听的业务数据库按需修改。
 
 # 使用CanalSharp.AspNetCore
-首先，通过NuGet或项目引用添加该组件，搜索CanalSharp.AspNetCore：<a href="https://www.nuget.org/packages/CanalSharp.AspNetCore/" rel="nofollow"><img src="https://camo.githubusercontent.com/122810804f2a88757570f0e31cc49873fe39bde9/68747470733a2f2f696d672e736869656c64732e696f2f6e756765742f762f536d61727453716c2e737667" alt="CanalSharp.AspNetCore" data-canonical-src="https://img.shields.io/nuget/v/https://img.shields.io/nuget/v/CanalSharp.AspNetCore.svg.svg" style="max-width:100%;"></a>
+首先，通过NuGet或项目引用添加该组件，搜索CanalSharp.AspNetCore：
+| Package | NuGet Stable |  Downloads |
+| ------- | -------- | ------- |
+| [CanalSharp.AspNetCore](https://www.nuget.org/packages/CanalSharp.AspNetCore/) | [![CanalSharp.AspNetCore](https://img.shields.io/nuget/v/CanalSharp.AspNetCore.svg)](https://www.nuget.org/packages/CanalSharp.AspNetCore/)  | [![CanalSharp.AspNetCore](https://img.shields.io/nuget/dt/CanalSharp.AspNetCore.svg)](https://www.nuget.org/packages/CanalSharp.AspNetCore/) |
 [![N|Nuget](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_Nuget.png)](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_Nuget.png)<br/>
 其次，在配置文件（appSettings.json)中添加以下配置项：
 ```sh
@@ -81,6 +84,9 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env,
     app.RegisterCanalSharpClient(appLifetime, Configuration, defaultLogger);
 }
 ```
+
+# 示例项目
+>[CanalSharp.AspNetCore.Sample](https://github.com/EdisonChou/CanalSharp.AspNetCore/tree/master/src/Sample/CanalSharp.AspNetCore.Sample)
 
 # 效果展示
 当在指定要监听的数据库对某张表的某行数据进行Update或Delete操作后，又或者进行Insert行操作后，canal.logs表会自动记录变更的记录数据如下图：
