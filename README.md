@@ -54,11 +54,9 @@ docker run --restart=always --name core_productservice_canal \
 `PS`: 其中name、destinations、defaultDatabaseName、filter根据要监听的业务数据库按需修改。
 
 # 使用CanalSharp.AspNetCore
-首先，通过NuGet或项目引用添加该组件，搜索CanalSharp.AspNetCore：
-| Package | NuGet Stable |  Downloads |
-| ------- | -------- | ------- |
-| [CanalSharp.AspNetCore](https://www.nuget.org/packages/CanalSharp.AspNetCore/) | [![CanalSharp.AspNetCore](https://img.shields.io/nuget/v/CanalSharp.AspNetCore.svg)](https://www.nuget.org/packages/CanalSharp.AspNetCore/)  | [![CanalSharp.AspNetCore](https://img.shields.io/nuget/dt/CanalSharp.AspNetCore.svg)](https://www.nuget.org/packages/CanalSharp.AspNetCore/) |
+首先，通过NuGet或项目引用添加该组件，搜索CanalSharp.AspNetCore：[![CanalSharp.AspNetCore](https://img.shields.io/nuget/v/CanalSharp.AspNetCore.svg)](https://www.nuget.org/packages/CanalSharp.AspNetCore/) | [![CanalSharp.AspNetCore](https://img.shields.io/nuget/dt/CanalSharp.AspNetCore.svg)](https://www.nuget.org/packages/CanalSharp.AspNetCore/)
 [![N|Nuget](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_Nuget.png)](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_Nuget.png)<br/>
+
 其次，在配置文件（appSettings.json)中添加以下配置项：
 ```sh
 "Canal": {
