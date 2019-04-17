@@ -22,6 +22,7 @@ namespace CanalSharp.AspNetCore.Extensions
                     ConnectionString = configuration["Canal:Output:ConnStr"]
                 };
                 var canalClient = BuildCanalClientHandler(configuration, mysqlOption, canalLogger);
+                canalClient.Start();
                 lifetime.ApplicationStopping.Register(() =>
                 {
                     canalClient.Stop();
@@ -82,7 +83,6 @@ PRIMARY KEY (`Id`)
                 },
             mysqlOption,
             canalLogger);
-            canalClient.Start();
 
             return canalClient;
         }
