@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <Authors>Edison Zhou</Authors>
-    <Description>One middleware for ASP.NET Core based on open source Canal Client - CanalSharp</Description>
+    <Description>One component for ASP.NET Core based on open source Canal Client - CanalSharp</Description>
     <Copyright>Copyright © 2019 Edison Zhou</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.0.1</Version>
