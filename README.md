@@ -1,5 +1,5 @@
 # CanalSharp.AspNetCore
-一个基于CanalSharp（一款针对.NET的Canal客户端开源项目）封装的ASP.NET Core业务组件，可以用于实时收集MySql数据更改记录，目前为Draft版本。
+一个基于CanalSharp（一款针对.NET的Canal客户端开源项目）封装的ASP.NET Core业务组件，可以用于实时收集MySql数据更改记录并写入修改日志数据表中（需提前创建）。
 
 # 关于CanalSharp
 CanalSharp 是阿里巴巴开源项目 Canal 的 .NET 客户端。为 .NET 开发者提供一个更友好的使用 Canal 的方式。Canal 是mysql数据库binlog的增量订阅&消费组件，其作者是[WithLin](https://github.com/WithLin)和[晓晨](https://github.com/stulzq)。<br/>

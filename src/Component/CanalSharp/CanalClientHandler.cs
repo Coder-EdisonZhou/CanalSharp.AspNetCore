@@ -1,15 +1,15 @@
-﻿using CanalSharp.AspNetCore.Utils;
+﻿using CanalSharp.AspNetCore.Infrastructure;
+using CanalSharp.AspNetCore.Utils;
 using CanalSharp.Client;
 using CanalSharp.Client.Impl;
 using Com.Alibaba.Otter.Canal.Protocol;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CanalSharp.AspNetCore.Infrastructure;
-using Microsoft.Extensions.Logging;
 
 namespace CanalSharp.AspNetCore.CanalSharp
 {
@@ -155,12 +155,12 @@ namespace CanalSharp.AspNetCore.CanalSharp
                         if (eventType == EventType.Delete)
                         {
                             // 如果是Delete事件类型
-                            PostRecords(rowData.BeforeColumns.ToList(), entry);
+                            PostRecords(rowData.BeforeColumns.ToList(), entry, "Delete");
                         }
                         else if (eventType == EventType.Insert)
                         {
                             // 如果是Insert事件类型
-                            PostRecords(rowData.AfterColumns.ToList(), entry);
+                            PostRecords(rowData.AfterColumns.ToList(), entry, "Insert");
                         }
                         else
                         {
@@ -172,20 +172,28 @@ namespace CanalSharp.AspNetCore.CanalSharp
             }
         }
 
-        // 发送Insert & Delete事件类型的变更记录到指定服务的数据存储中
-        private void PostRecords(List<Column> columns, Entry entry)
+        // 发送Insert或Delete事件类型的变更记录到指定服务的数据存储中
+        private void PostRecords(List<Column> columns, Entry entry, string eventType)
         {
-            _canalLogger?.LogInformation($"[{_xdpCanalOption.LogSource}]", $"### One Insert/Delete event on {entry.Header.SchemaName} recording.");
+            _canalLogger?.LogInformation($"[{_xdpCanalOption.LogSource}]", $"### One {eventType} event on {entry.Header.SchemaName} recording.");
 
-            List<ColumnChange> columnChanges = new List<ColumnChange>();
-            foreach (var column in columns)
+            StringBuilder recordBuilder = new StringBuilder();
+            recordBuilder.Append("{");
+
+            for (int i = 0; i < columns.Count; i++)
             {
-                columnChanges.Add(new ColumnChange()
+                var column = columns[i];
+                if (i == columns.Count - 1)
                 {
-                    ColumnName = column.Name,
-                    ColumnValue = column.Value
-                });
+                    recordBuilder.Append($"\"{column.Name}\":{column.Value ?? string.Empty}");
+                }
+                else
+                {
+                    recordBuilder.Append($"\"{column.Name}\":{column.Value ?? string.Empty},");
+                }
             }
+
+            recordBuilder.Append("}");
 
             List<ChangeLog> changLogs = new List<ChangeLog>();
             ChangeLog changeLog = new ChangeLog
@@ -199,10 +207,10 @@ namespace CanalSharp.AspNetCore.CanalSharp
             switch (entry.Header.EventType)
             {
                 case EventType.Insert:
-                    changeLog.CurrentValue = JsonConvert.SerializeObject(columnChanges);
+                    changeLog.CurrentValue = recordBuilder.ToString();
                     break;
                 case EventType.Delete:
-                    changeLog.PreviousValue = JsonConvert.SerializeObject(columnChanges);
+                    changeLog.PreviousValue = recordBuilder.ToString();
                     break;
             }
 
@@ -210,7 +218,7 @@ namespace CanalSharp.AspNetCore.CanalSharp
             _canalRepository = new MySqlCanalRepository(_options);
             _canalRepository.SaveChangeHistoriesAsync(changLogs);
 
-            _canalLogger?.LogInformation($"[{_xdpCanalOption.LogSource}]", $"### One Insert/Delete event on {entry.Header.SchemaName} recorded.");
+            _canalLogger?.LogInformation($"[{_xdpCanalOption.LogSource}]", $"### One {eventType} event on {entry.Header.SchemaName} recorded.");
         }
 
         // 发送Update事件类型的变更记录到指定的数据存储中
