@@ -1,5 +1,5 @@
 # CanalSharp.AspNetCore
-一个基于CanalSharp（一款针对.NET的Canal客户端开源项目）封装的ASP.NET Core业务组件，可以用于实时收集MySql数据更改记录并写入修改日志数据表中（需提前创建）。
+一个基于CanalSharp（一款针对.NET的Canal客户端开源项目）封装的ASP.NET Core业务组件，可以用于实时收集MySql数据更改记录并写入修改日志数据表中（CanalSharp.AspNetCore会自动帮你创建一张日志记录表）。
 
 # 关于CanalSharp
 CanalSharp 是阿里巴巴开源项目 Canal 的 .NET 客户端。为 .NET 开发者提供一个更友好的使用 Canal 的方式。Canal 是mysql数据库binlog的增量订阅&消费组件，其作者是[WithLin](https://github.com/WithLin)和[晓晨](https://github.com/stulzq)。<br/>
@@ -33,21 +33,6 @@ GRANT SELECT, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO canal @'%';
 FLUSH PRIVILEGES;
 ```
 
-创建一张用于记录数据变更的历史数据表：
-```sh
-CREATE TABLE IF NOT EXISTS `canal.logs` (
-`Id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Id',
-`SchemaName` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '数据库名称',
-`TableName` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '表名',
-`EventType` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '事件类型',
-`ColumnName` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '列名',
-`PreviousValue` text COLLATE utf8mb4_unicode_ci COMMENT '变更前的值',
-`CurrentValue` text COLLATE utf8mb4_unicode_ci COMMENT '变更后的值',
-`ExecuteTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '变更时间',
-PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='变更日志记录表';
-```
-
 # 安装Canal-Server
 通过Docker拉取Canal镜像：
 ```sh
@@ -69,8 +54,9 @@ docker run --restart=always --name core_productservice_canal \
 `PS`: 其中name、destinations、defaultDatabaseName、filter根据要监听的业务数据库按需修改。
 
 # 使用CanalSharp.AspNetCore
-首先，通过NuGet或项目引用添加该组件，搜索CanalSharp.AspNetCore, URL为https://www.nuget.org/packages/CanalSharp.AspNetCore/
+首先，通过NuGet或项目引用添加该组件，搜索CanalSharp.AspNetCore：[![CanalSharp.AspNetCore](https://img.shields.io/nuget/v/CanalSharp.AspNetCore.svg)](https://www.nuget.org/packages/CanalSharp.AspNetCore/) | [![CanalSharp.AspNetCore](https://img.shields.io/nuget/dt/CanalSharp.AspNetCore.svg)](https://www.nuget.org/packages/CanalSharp.AspNetCore/)
 [![N|Nuget](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_Nuget.png)](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_Nuget.png)<br/>
+
 其次，在配置文件（appSettings.json)中添加以下配置项：
 ```sh
 "Canal": {
@@ -81,7 +67,10 @@ docker run --restart=always --name core_productservice_canal \
     "Destination": "products", // 建议与Canal-Server中配置的destination保持一致
     "Filter": "products_dev\\..*", // 建议与Canal-Server中配置的filter保持一致
     "SleepTime": 50, // SleepTime越短监听频率越高但也越耗CPU
-    "BufferSize": 2048 // 每次监听获取的数据量大小，单位为字节
+    "BufferSize": 2048, // 每次监听获取的数据量大小，单位为字节
+    "Output": {
+      "ConnStr": "Server=192.168.16.150;Port=3306;Database=products_dev;Uid=dev;Pwd=xdp" // 要输出的日志记录表所在的数据连接字符串
+    }
   }
 ```
 最后，在StartUp类中的Configure方法中加入以下代码行：
@@ -93,6 +82,9 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env,
     app.RegisterCanalSharpClient(appLifetime, Configuration, defaultLogger);
 }
 ```
+
+# 示例项目
+>[CanalSharp.AspNetCore.Sample](https://github.com/EdisonChou/CanalSharp.AspNetCore/tree/master/sample)
 
 # 效果展示
 当在指定要监听的数据库对某张表的某行数据进行Update或Delete操作后，又或者进行Insert行操作后，canal.logs表会自动记录变更的记录数据如下图：

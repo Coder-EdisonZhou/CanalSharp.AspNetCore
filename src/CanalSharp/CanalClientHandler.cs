@@ -58,8 +58,10 @@ namespace CanalSharp.AspNetCore.CanalSharp
 
                     while (true)
                     {
-                        // 获取数据 BufferSize表示数据大小，单位为字节
+                        // 获取数据 BufferSize表示数据大小，单位为字节，默认会发送ACK来表示消费成功
                         var message = _canalConnector.Get(_xdpCanalOption.BufferSize);
+                        // 也可以使用下面这个GetWithoutAck方法表示不发送ACK来表示消费成功
+                        //var message = _canalConnector.GetWithoutAck(_xdpCanalOption.BufferSize);
 
                         // 批次id 可用于回滚
                         var batchId = message.Id;

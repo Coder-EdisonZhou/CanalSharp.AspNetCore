@@ -117,3 +117,6 @@ UpgradeLog*.XML
 /src/Sample/CanalSharp.AspNetCore.Sample/.vs/CanalSharp.AspNetCore.Sample/v15/Server/sqlite3/storage.ide
 /src/Sample/CanalSharp.AspNetCore.Sample/.vs/CanalSharp.AspNetCore.Sample/v15/Server/sqlite3/storage.ide-shm
 /src/Sample/CanalSharp.AspNetCore.Sample/.vs/CanalSharp.AspNetCore.Sample/v15/Server/sqlite3/storage.ide-wal
+/src/.vs/CanalSharp.AspNetCore/v15/Server/sqlite3/storage.ide-shm
+/src/.vs/CanalSharp.AspNetCore/v15/Server/sqlite3/*.ide-shm
+/src/.vs/CanalSharp.AspNetCore/v15/Server/sqlite3/*.ide-wal
