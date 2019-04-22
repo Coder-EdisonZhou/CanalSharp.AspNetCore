@@ -10,7 +10,7 @@ CanalSharp 是阿里巴巴开源项目 Canal 的 .NET 客户端。为 .NET 开�
 CanalSharp.AspNetCore是一个基于CanalSharp的适用于ASP.NET Core的一个后台任务组件，它可以随着ASP.NET Core实例的启动而启动，目前采用轮询的方式对Canal Server进行监听，获得MySql行更改（RowChange）后写入MySql指定的记录表中（canal.logs)。当然，这只是我目前的业务需求，完全可以改为事件订阅+自定义输出的方式进行完善，这是后话了。
 
 # 准备工作
-当前的canal开源版本支持5.7及以下的版本，针对阿里云RDS账号默认已经有binlog dump权限，不需要任何权限或者binlog设置，可以直接跳过这一步。
+当前的canal开源版本支持8.0及以下的版本，针对阿里云RDS账号默认已经有binlog dump权限，不需要任何权限或者binlog设置，可以直接跳过这一步。
 开启binlog写入功能，并且配置binlog模式为row。<br/>
 修改C:\ProgramData\MySQL\MySQL Server 5.7\my.ini的以下内容
 ```sh
