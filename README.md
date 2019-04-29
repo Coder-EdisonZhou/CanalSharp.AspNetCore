@@ -7,7 +7,7 @@ CanalSharp 是阿里巴巴开源项目 Canal 的 .NET 客户端。为 .NET 开�
 更多关于Canal的信息请浏览：https://github.com/alibaba/canal
 
 # 关于此组件
-CanalSharp.AspNetCore是一个基于CanalSharp的适用于ASP.NET Core的一个后台任务组件，它可以随着ASP.NET Core实例的启动而启动，目前采用轮询的方式对Canal Server进行监听，获得MySql行更改（RowChange）后写入MySql指定的记录表中（canal.logs)。当然，这只是我目前的业务需求，完全可以改为事件订阅+自定义输出的方式进行完善，这是后话了。
+CanalSharp.AspNetCore是一个基于CanalSharp的适用于ASP.NET Core的一个后台任务组件，它可以随着ASP.NET Core实例的启动而启动，目前采用轮询的方式对Canal Server进行监听，获得MySql行更改（RowChange）后写入MySql或MongoDB中指定的记录表中。
 
 # 准备工作
 当前的canal开源版本支持8.0及以下的版本，针对阿里云RDS账号默认已经有binlog dump权限，不需要任何权限或者binlog设置，可以直接跳过这一步。
@@ -87,9 +87,14 @@ public void Configure(IApplicationBuilder app, IHostingEnvironment env,
 >[CanalSharp.AspNetCore.Sample](https://github.com/EdisonChou/CanalSharp.AspNetCore/tree/master/sample)
 
 # 效果展示
-当在指定要监听的数据库对某张表的某行数据进行Update或Delete操作后，又或者进行Insert行操作后，canal.logs表会自动记录变更的记录数据如下图：
-[![N|DEMO](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_canal.logs.show.png)](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_canal.logs.show.png)<br/>
+当在指定要监听的数据库对某张表的某行数据进行Update或Delete操作后，又或者进行Insert行操作后。
+## MySql
+如果选择输出到MySql数据库，那么canal.logs表会自动记录变更的记录数据如下图：
+[![N|DEMO1](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_canal.logs.show.png)](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_canal.logs.show.png)<br/>
 `PS`: INSERT操作会记录新增的数据行数据到CurrentValue列，DELETE操作会记录删除的数据行数据到PreviousValue列，UPDATE操作则会记录修改前PreviousValue和修改后的值CurrentValue。
+## MongoDB
+如果选择输出到MongoDB，那么会自动记录变更数据如下图：
+[![N|DEMO2](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_MongoDB_Record.png)](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_MongoDB_Record.png)
 
 
 
