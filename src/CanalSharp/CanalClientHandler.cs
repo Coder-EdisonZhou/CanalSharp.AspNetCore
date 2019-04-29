@@ -18,14 +18,14 @@ namespace CanalSharp.AspNetCore.CanalSharp
         private readonly CanalOption _xdpCanalOption;
         private readonly ILogger<ICanalClientHandler> _canalLogger;
         private readonly CancellationTokenSource _cts;
-        private readonly MySqlOutputOptions _options;
+        private readonly OutputOptions _options;
 
         private ICanalConnector _canalConnector;
         private ICanalRepository _canalRepository;
         private bool _disposed;
         private Task _compositeTask;
 
-        public CanalClientHandler(CanalOption xdpCanalOption, MySqlOutputOptions options, ILogger<ICanalClientHandler> canalLogger)
+        public CanalClientHandler(CanalOption xdpCanalOption, OutputOptions options, ILogger<ICanalClientHandler> canalLogger)
         {
             _xdpCanalOption = xdpCanalOption;
             _canalLogger = canalLogger;
@@ -33,9 +33,19 @@ namespace CanalSharp.AspNetCore.CanalSharp
             _cts = new CancellationTokenSource();
         }
 
+        public void Initialize()
+        {
+            _canalLogger?.LogDebug("Starting to initialize log database.");
+
+            _canalRepository = CanalRepositoryFactory.GetCanalRepositoryInstance(_options);
+            _canalRepository.InitializeAsync();
+
+            _canalLogger?.LogDebug("Finished to initialize log database.");
+        }
+
         public void Start()
         {
-            _canalLogger?.LogInformation($"### [{_xdpCanalOption.LogSource}] Canal Client starting...");
+            _canalLogger?.LogDebug($"### [{_xdpCanalOption.LogSource}] Canal Client starting...");
 
             Task.Factory.StartNew(
                 () =>
@@ -85,16 +95,16 @@ namespace CanalSharp.AspNetCore.CanalSharp
 
             _compositeTask = Task.CompletedTask;
 
-            _canalLogger?.LogInformation($"### [{_xdpCanalOption.LogSource}] Canal Client started...");
+            _canalLogger?.LogDebug($"### [{_xdpCanalOption.LogSource}] Canal Client started...");
         }
 
         public void Stop()
         {
-            _canalLogger?.LogInformation($"### [{_xdpCanalOption.LogSource}] Canal Client stopping...");
+            _canalLogger?.LogDebug($"### [{_xdpCanalOption.LogSource}] Canal Client stopping...");
 
             Dispose();
 
-            _canalLogger?.LogInformation($"### [{_xdpCanalOption.LogSource}] Canal Client stoped...");
+            _canalLogger?.LogDebug($"### [{_xdpCanalOption.LogSource}] Canal Client stoped...");
         }
 
         public void Dispose()
@@ -177,7 +187,7 @@ namespace CanalSharp.AspNetCore.CanalSharp
         // 发送Insert或Delete事件类型的变更记录到指定服务的数据存储中
         private void PostRecords(List<Column> columns, Entry entry, string eventType)
         {
-            _canalLogger?.LogInformation($"[{_xdpCanalOption.LogSource}]", $"### One {eventType} event on {entry.Header.SchemaName} recording.");
+            _canalLogger?.LogDebug($"[{_xdpCanalOption.LogSource}]", $"### One {eventType} event on {entry.Header.SchemaName} recording.");
 
             StringBuilder recordBuilder = new StringBuilder();
             recordBuilder.Append("{");
@@ -197,7 +207,7 @@ namespace CanalSharp.AspNetCore.CanalSharp
 
             recordBuilder.Append("}");
 
-            List<ChangeLog> changLogs = new List<ChangeLog>();
+            List<ChangeLog> changeLogs = new List<ChangeLog>();
             ChangeLog changeLog = new ChangeLog
             {
                 SchemaName = entry.Header.SchemaName,
@@ -216,17 +226,17 @@ namespace CanalSharp.AspNetCore.CanalSharp
                     break;
             }
 
-            changLogs.Add(changeLog);
-            _canalRepository = new MySqlCanalRepository(_options);
-            _canalRepository.SaveChangeHistoriesAsync(changLogs);
+            changeLogs.Add(changeLog);
+            _canalRepository = CanalRepositoryFactory.GetCanalRepositoryInstance(_options);
+            _canalRepository.SaveChangeHistoriesAsync(changeLogs);
 
-            _canalLogger?.LogInformation($"[{_xdpCanalOption.LogSource}]", $"### One {eventType} event on {entry.Header.SchemaName} recorded.");
+            _canalLogger?.LogDebug($"[{_xdpCanalOption.LogSource}]", $"### One {eventType} event on {entry.Header.SchemaName} recorded.");
         }
 
         // 发送Update事件类型的变更记录到指定的数据存储中
         private void PostUpdatedRecords(List<Column> beforeColumns, List<Column> afterColumns, Entry entry)
         {
-            _canalLogger?.LogInformation($"[{_xdpCanalOption.LogSource}]", $"### One Update event on {entry.Header.SchemaName} recording.");
+            _canalLogger?.LogDebug($"[{_xdpCanalOption.LogSource}]", $"### One Update event on {entry.Header.SchemaName} recording.");
 
             List<ChangeLog> changeLogs = new List<ChangeLog>();
 
@@ -252,10 +262,10 @@ namespace CanalSharp.AspNetCore.CanalSharp
                 }
             }
 
-            _canalRepository = new MySqlCanalRepository(_options);
+            _canalRepository = CanalRepositoryFactory.GetCanalRepositoryInstance(_options);
             _canalRepository.SaveChangeHistoriesAsync(changeLogs);
 
-            _canalLogger?.LogInformation($"[{_xdpCanalOption.LogSource}]", $"### One Update event on {entry.Header.SchemaName} recorded.");
+            _canalLogger?.LogDebug($"[{_xdpCanalOption.LogSource}]", $"### One Update event on {entry.Header.SchemaName} recorded.");
         }
 
         #endregion

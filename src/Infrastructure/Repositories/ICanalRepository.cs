@@ -5,6 +5,8 @@ namespace CanalSharp.AspNetCore.Infrastructure
 {
     public interface ICanalRepository
     {
+        Task InitializeAsync();
+
         Task<bool> SaveChangeHistoriesAsync(List<ChangeLog> changeHistories);
     }
 }

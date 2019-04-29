@@ -1,4 +1,6 @@
-﻿namespace CanalSharp.AspNetCore.CanalSharp
+﻿using CanalSharp.AspNetCore.Infrastructure.Enums;
+
+namespace CanalSharp.AspNetCore.CanalSharp
 {
     public class CanalOption
     {
