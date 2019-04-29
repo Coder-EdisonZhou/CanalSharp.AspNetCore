@@ -1,5 +1,5 @@
 # CanalSharp.AspNetCore
-一个基于CanalSharp（一款针对.NET的Canal客户端开源项目）封装的ASP.NET Core业务组件，可以用于实时收集MySql数据更改记录并写入修改日志数据表中（CanalSharp.AspNetCore会自动帮你创建一张日志记录表）。
+一个基于CanalSharp（一款针对.NET的Canal客户端开源项目）封装的ASP.NET Core业务组件，可以用于实时收集MySql数据更改记录并写入修改日志数据表中，可以选择MySql或者MongoDB作为输出记录。
 
 # 关于CanalSharp
 CanalSharp 是阿里巴巴开源项目 Canal 的 .NET 客户端。为 .NET 开发者提供一个更友好的使用 Canal 的方式。Canal 是mysql数据库binlog的增量订阅&消费组件，其作者是[WithLin](https://github.com/WithLin)和[晓晨](https://github.com/stulzq)。<br/>
@@ -57,7 +57,7 @@ docker run --restart=always --name core_productservice_canal \
 首先，通过NuGet或项目引用添加该组件，搜索CanalSharp.AspNetCore：[![CanalSharp.AspNetCore](https://img.shields.io/nuget/v/CanalSharp.AspNetCore.svg)](https://www.nuget.org/packages/CanalSharp.AspNetCore/) | [![CanalSharp.AspNetCore](https://img.shields.io/nuget/dt/CanalSharp.AspNetCore.svg)](https://www.nuget.org/packages/CanalSharp.AspNetCore/)
 [![N|Nuget](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_Nuget.png)](https://www.cnblogs.com/images/cnblogs_com/edisonchou/1260867/o_Nuget.png)<br/>
 
-其次，在配置文件（appSettings.json)中添加以下配置项：
+其次，在配置文件（appSettings.json)中添加以下配置项：MySql和MongoDB是二选一的配置，不可同时设置。
 ```sh
 "Canal": {
     "Enabled": true,
@@ -69,7 +69,13 @@ docker run --restart=always --name core_productservice_canal \
     "SleepTime": 50, // SleepTime越短监听频率越高但也越耗CPU
     "BufferSize": 2048, // 每次监听获取的数据量大小，单位为字节
     "Output": {
-      "ConnStr": "Server=192.168.16.150;Port=3306;Database=products_dev;Uid=dev;Pwd=xdp" // 要输出的日志记录表所在的数据连接字符串
+      "MySql":{
+        "ConnStr": "Server=192.168.16.150;Port=3306;Database=products_dev;Uid=dev;Pwd=xdp" // 要输出的日志记录表所在的MySql连接字符串
+      },
+      "Mongo":{
+        "ConnStr": "mongodb://192.168.16.150:27017", // 要输出的日志记录表所在的MongDB连接字符串
+        "DataBase": "productrs_dev" // 要输出的日志记录表所在的MongDB数据库名
+      },
     }
   }
 ```
