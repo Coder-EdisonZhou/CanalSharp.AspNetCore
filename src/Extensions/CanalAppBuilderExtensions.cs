@@ -1,11 +1,10 @@
 ﻿using CanalSharp.AspNetCore.CanalSharp;
 using CanalSharp.AspNetCore.Infrastructure;
-using Dapper;
+using CanalSharp.AspNetCore.Infrastructure.Enums;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MySql.Data.MySqlClient;
 using System;
 
 namespace CanalSharp.AspNetCore.Extensions
@@ -17,56 +16,55 @@ namespace CanalSharp.AspNetCore.Extensions
             var isEnableCanalClient = Convert.ToBoolean(configuration["Canal:Enabled"] ?? "false");
             if (isEnableCanalClient)
             {
-                var mysqlOption = new MySqlOutputOptions()
-                {
-                    ConnectionString = configuration["Canal:Output:ConnStr"]
-                };
-                var canalClient = BuildCanalClientHandler(configuration, mysqlOption, canalLogger);
+                var outputOptions = BuildOutputOptions(configuration);
+                var canalClient = BuildCanalClientHandler(configuration, outputOptions, canalLogger);
+                canalClient.Initialize();
                 canalClient.Start();
                 lifetime.ApplicationStopping.Register(() =>
                 {
                     canalClient.Stop();
                 });
-
-                InitializeCanalLogTable(mysqlOption, canalLogger);
             }
 
             return app;
         }
 
         /// <summary>
-        /// 初始化Canal日志数据表
+        /// 构造OutputOptions
         /// </summary>
-        private static void InitializeCanalLogTable(MySqlOutputOptions mysqlOption, ILogger<ICanalClientHandler> canalLogger)
+        /// <param name="configuration">配置文件</param>
+        /// <returns>OutputOptions</returns>
+        private static OutputOptions BuildOutputOptions(IConfiguration configuration)
         {
-            canalLogger?.LogDebug("Starting to create table canal.logs for mysql database.");
+            OutputOptions outputOptions = null;
 
-            var ddlSql =
-                $@"
-CREATE TABLE IF NOT EXISTS `{mysqlOption.TableNamePrefix}.{mysqlOption.TableName}` (
-`Id` varchar(128) NOT NULL COMMENT 'Id',
-`SchemaName` varchar(50) DEFAULT NULL COMMENT '数据库名称',
-`TableName` varchar(50) DEFAULT NULL COMMENT '表名',
-`EventType` varchar(50) DEFAULT NULL COMMENT '事件类型',
-`ColumnName` varchar(50) DEFAULT NULL COMMENT '列名',
-`PreviousValue` text COMMENT '变更前的值',
-`CurrentValue` text COMMENT '变更后的值',
-`ExecuteTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '变更时间',
-PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='变更日志记录表';";
-
-            using (var connection = new MySqlConnection(mysqlOption.ConnectionString))
+            // MySql output
+            if (configuration["Canal:Output:MySql:ConnStr"] != null)
             {
-                connection.Execute(ddlSql);
+                outputOptions = new MySqlOutputOptions()
+                {
+                    ConnectionString = configuration["Canal:Output:MySql:ConnStr"],
+                    Output = OutputEnum.MySql
+                };
+            }
+            // Mongo output
+            if (configuration["Canal:Output:Mongo:ConnStr"] != null)
+            {
+                outputOptions = new MongoOutputOptions()
+                {
+                    ConnectionString = configuration["Canal:Output:Mongo:ConnStr"],
+                    DataBase = configuration["Canal:Output:Mongo:DataBase"],
+                    Output = OutputEnum.Mongo
+                };
             }
 
-            canalLogger?.LogDebug("Finished to create table canal.logs for mysql database.");
+            return outputOptions;
         }
 
         /// <summary>
         /// 构造CanalClientHandler
         /// </summary>
-        private static CanalClientHandler BuildCanalClientHandler(IConfiguration configuration, MySqlOutputOptions mysqlOption, ILogger<ICanalClientHandler> canalLogger)
+        private static CanalClientHandler BuildCanalClientHandler(IConfiguration configuration, OutputOptions outputOptions, ILogger<ICanalClientHandler> canalLogger)
         {
             var canalClient = new CanalClientHandler(
                 new CanalOption()
@@ -81,7 +79,7 @@ PRIMARY KEY (`Id`)
                     BufferSize = Convert.ToInt32(configuration["Canal:BufferSize"] ?? "1024"),
                     LogSource = configuration["Canal:LogSource"] ?? "[Canal]"
                 },
-            mysqlOption,
+            outputOptions,
             canalLogger);
 
             return canalClient;
