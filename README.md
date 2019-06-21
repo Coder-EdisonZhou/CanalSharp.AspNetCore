@@ -81,11 +81,10 @@ docker run --restart=always --name core_productservice_canal \
 ```
 最后，在StartUp类中的Configure方法中加入以下代码行：
 ```sh
-public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-            IApplicationLifetime appLifetime, ILogger<ICanalClientHandler> defaultLogger)
+public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 {
     ......
-    app.RegisterCanalSharpClient(appLifetime, Configuration, defaultLogger);
+    app.RegisterCanalSharpClient(Configuration);
 }
 ```
 
