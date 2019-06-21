@@ -11,16 +11,19 @@ namespace CanalSharp.AspNetCore.Extensions
 {
     public static class CanalAppBuilderExtensions
     {
-        public static IApplicationBuilder RegisterCanalSharpClient(this IApplicationBuilder app, IApplicationLifetime lifetime, IConfiguration configuration, ILogger<ICanalClientHandler> canalLogger = null)
+        public static IApplicationBuilder RegisterCanalSharpClient(this IApplicationBuilder app, IConfiguration configuration)
         {
             var isEnableCanalClient = Convert.ToBoolean(configuration["Canal:Enabled"] ?? "false");
             if (isEnableCanalClient)
             {
                 var outputOptions = BuildOutputOptions(configuration);
-                var canalClient = BuildCanalClientHandler(configuration, outputOptions, canalLogger);
+                var logger = app.ApplicationServices.GetService(typeof(ILogger<ICanalClientHandler>)) as ILogger<ICanalClientHandler>;
+                var canalClient = BuildCanalClientHandler(configuration, outputOptions, logger);
                 canalClient.Initialize();
                 canalClient.Start();
-                lifetime.ApplicationStopping.Register(() =>
+
+                var appLifeTime = app.ApplicationServices.GetService(typeof(IApplicationLifetime)) as IApplicationLifetime;
+                appLifeTime.ApplicationStopping.Register(() =>
                 {
                     canalClient.Stop();
                 });
