@@ -1,11 +1,9 @@
-﻿using CanalSharp.AspNetCore.CanalSharp;
-using CanalSharp.AspNetCore.Extensions;
+﻿using CanalSharp.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace CanalSharp.AspNetCore.Sample
 {
@@ -34,7 +32,7 @@ namespace CanalSharp.AspNetCore.Sample
 
             app.UseMvc();
 
-            app.RegisterCanalSharpClient(Configuration);
+            app.UseCanalClient(Configuration);
         }
     }
 }
