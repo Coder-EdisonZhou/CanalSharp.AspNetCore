@@ -11,7 +11,7 @@ namespace CanalSharp.AspNetCore.Extensions
 {
     public static class CanalAppBuilderExtensions
     {
-        public static IApplicationBuilder RegisterCanalSharpClient(this IApplicationBuilder app, IConfiguration configuration)
+        public static IApplicationBuilder UseCanalClient(this IApplicationBuilder app, IConfiguration configuration)
         {
             var isEnableCanalClient = Convert.ToBoolean(configuration["Canal:Enabled"] ?? "false");
             if (isEnableCanalClient)
@@ -46,7 +46,8 @@ namespace CanalSharp.AspNetCore.Extensions
             {
                 outputOptions = new MySqlOutputOptions()
                 {
-                    ConnectionString = configuration["Canal:Output:MySql:ConnStr"],
+                    ConnectionString = configuration["Canal:Output:MySql:ConnStr"] ?? 
+                        throw new ArgumentNullException("[CanalClient] MySql连接字符串不能为空!"),
                     Output = OutputEnum.MySql
                 };
             }
@@ -55,8 +56,10 @@ namespace CanalSharp.AspNetCore.Extensions
             {
                 outputOptions = new MongoOutputOptions()
                 {
-                    ConnectionString = configuration["Canal:Output:Mongo:ConnStr"],
-                    DataBase = configuration["Canal:Output:Mongo:DataBase"],
+                    ConnectionString = configuration["Canal:Output:Mongo:ConnStr"] ??
+                        throw new ArgumentNullException("[CanalClient] Mongo连接字符串不能为空!"),
+                    DataBase = configuration["Canal:Output:Mongo:DataBase"] ??
+                        throw new ArgumentNullException("[CanalClient] Mongo数据库名不能为空!"),
                     Output = OutputEnum.Mongo
                 };
             }

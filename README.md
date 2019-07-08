@@ -84,7 +84,7 @@ docker run --restart=always --name core_productservice_canal \
 public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 {
     ......
-    app.RegisterCanalSharpClient(Configuration);
+    app.UseCanalClient(Configuration);
 }
 ```
 
