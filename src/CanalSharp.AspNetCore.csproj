@@ -6,7 +6,7 @@
     <Description>One component for ASP.NET Core based on open source Canal Client - CanalSharp</Description>
     <Copyright>Copyright © 2019 Edison Zhou</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.5</Version>
+    <Version>0.0.6</Version>
     <PackageIconUrl></PackageIconUrl>
     <PackageProjectUrl>https://github.com/XiLife-OSPC/CanalSharp.AspNetCore</PackageProjectUrl>
     <Company>XiLife-OSPC</Company>
