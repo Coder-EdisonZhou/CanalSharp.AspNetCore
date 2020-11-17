@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Authors>Edison Zhou</Authors>
     <Description>One component for ASP.NET Core based on open source Canal Client - CanalSharp</Description>
-    <Copyright>Copyright © 2019 Edison Zhou</Copyright>
+    <Copyright>Copyright © 2020 Edison Zhou</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.0.7</Version>
     <PackageIconUrl></PackageIconUrl>
